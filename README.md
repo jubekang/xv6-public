@@ -1,3 +1,23 @@
+# 2023 Personal Study in OSLAB
+
+xv6 OS implementation
+
+- tested on Linux 16.04.7 LTS (SERVER ver.)
+- use qemu emulator
+
+## Command 
+    $ make
+> simply build project
+
+    $ make qemu-nox
+> build project and run OS (-nox for no display option)
+
+    $ make qemu-nox-gdb
+> build project and run OS on gdb
+
+    $ gdb ./kernel
+> run above command and open another shell with this command
+## Original README
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)

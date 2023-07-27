@@ -12,3 +12,4 @@ main (int argc, char *argv[]) {
     mknod("/console",1,1);
 
     exit();
+}

@@ -17,6 +17,12 @@ xv6 OS implementation
 
     $ gdb ./kernel
 > run above command and open another shell with this command
+
+    $ ctrl + a and x
+> exit qemu 
+
+    $ ctrl d
+> exit current process on xv6
 ## Original README
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version

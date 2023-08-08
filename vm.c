@@ -135,6 +135,21 @@ setupkvm(void)
   return pgdir;
 }
 
+// Copy kernel part of a page table.
+pde_t*
+copykvm(pde_t *oldpgdir)
+{
+  pde_t *pgdir;
+
+  if((pgdir = (pde_t*)kalloc()) == 0)
+    return 0;
+  memset(pgdir, 0, PGSIZE);
+  if (P2V(PHYSTOP) > (void*)DEVSPACE)
+    panic("PHYSTOP too high");
+  memmove(pgdir + PDX(KERNBASE), oldpgdir + PDX(KERNBASE), PGSIZE/2);
+  return pgdir;
+}
+
 // Allocate one page table for the machine for the kernel address
 // space for scheduler processes.
 void
@@ -283,17 +298,18 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 void
 freevm(pde_t *pgdir)
 {
-  uint i;
-
   if(pgdir == 0)
     panic("freevm: no pgdir");
+  /* free only user parts page table */
   deallocuvm(pgdir, KERNBASE, 0);
-  for(i = 0; i < NPDENTRIES; i++){
+
+  /* for(i = 0; i < NPDENTRIES; i++){
     if(pgdir[i] & PTE_P){
       char * v = P2V(PTE_ADDR(pgdir[i]));
       kfree(v);
     }
-  }
+  } */
+
   kfree((char*)pgdir);
 }
 
@@ -320,7 +336,7 @@ copyuvm(pde_t *pgdir, uint sz)
   uint pa, i, flags;
   char *mem;
 
-  if((d = setupkvm()) == 0)
+  if((d = copykvm(pgdir)) == 0)
     return 0;
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)

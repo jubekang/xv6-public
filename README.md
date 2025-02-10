@@ -1,4 +1,4 @@
-# 2023 Personal Study in OSLAB
+# 2023 Individual Study in OSLAB
 
 xv6 OS implementation
 
